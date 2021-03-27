@@ -1,23 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import ls from 'local-storage';
+
+import CustomForm from './components/CustomForm';
+import formDef from './data/formDef';
 
 function App() {
+
+  const [form, setForm] = useState(null);
+
+  useEffect(() => {
+    // mock loading saved form
+    let loadedForm = ls.get('savedForm');
+    console.log(loadedForm);
+
+    if (loadedForm && loadedForm.length > 0) {
+      loadedForm = JSON.parse(loadedForm);
+      setForm(loadedForm);
+    } else {
+      setForm({});
+    }
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="content">
+      { form && <CustomForm formDef={formDef} savedForm={form} />}
     </div>
   );
 }
